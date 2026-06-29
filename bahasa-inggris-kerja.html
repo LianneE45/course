@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bahasa Inggris Kerja – SkillBridge</title>
+<style>
+/* ── TOKENS (identical to index.html & dash_board.html) ── */
+:root{
+  --primary:#14B8A6;
+  --primary-light:#e6faf8;
+  --secondary:#3B82F6;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --radius-lg:20px;
+  --radius-md:14px;
+  --radius-sm:10px;
+  --shadow-card:0 6px 20px rgba(0,0,0,.06);
+  --header-h:61px;
+  --sidebar-w:272px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Segoe UI',system-ui,sans-serif;
+  background:#fff;
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+
+/* ═══════════════════════════════════════════════════
+   HEADER  — pixel-perfect match to index.html
+═══════════════════════════════════════════════════ */
+.lp-header{
+  position:sticky;top:0;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  z-index:200;
+  height:var(--header-h);
+}
+.header-inner{
+  padding:0 20px;
+  height:100%;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.header-left{display:flex;align-items:center;gap:22px}
+.logo-link{
+  display:flex;align-items:center;
+  text-decoration:none;border:none;background:none;cursor:pointer;padding:0;
+}
+.logo{font-weight:700;font-size:1.5rem;color:var(--primary)}
+
+.nav{display:flex;align-items:center}
+.nav a,.nav-btn{
+  margin-left:18px;
+  text-decoration:none;color:var(--text);font-size:.95rem;
+  background:none;border:none;cursor:pointer;font-family:inherit;padding:0;
+  transition:color .15s;
+}
+.nav a:hover,.nav-btn:hover{color:var(--primary)}
+
+.signin-btn{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--primary-light);border:2px solid var(--primary);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:background .15s;padding:0;
+}
+.signin-btn:hover{background:#d3f3ef}
+.signin-btn svg{width:22px;height:22px}
+
+/* ═══════════════════════════════════════════════════
+   COURSE MODAL  — copied verbatim from index.html
+═══════════════════════════════════════════════════ */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(15,23,42,.55);
+  z-index:500;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:#fff;border-radius:var(--radius-lg);
+  width:100%;max-width:760px;max-height:85vh;overflow-y:auto;
+  padding:28px;position:relative;
+}
+.modal-close{
+  position:absolute;top:18px;right:18px;
+  background:none;border:none;font-size:1.4rem;cursor:pointer;
+  color:var(--muted);line-height:1;padding:4px;
+}
+.modal-close:hover{color:var(--text)}
+.modal h2{font-size:1.3rem;margin-bottom:20px}
+.course-modal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.course-modal-item{
+  border:1px solid var(--border);border-radius:var(--radius-md);
+  padding:18px;display:flex;flex-direction:column;gap:6px;
+  text-align:left;background:#fff;cursor:pointer;
+  transition:border-color .15s,background .15s;
+}
+.course-modal-item:hover{border-color:var(--primary);background:var(--primary-light)}
+.course-modal-icon{font-size:1.6rem}
+.course-modal-item h4{font-size:.95rem;font-weight:700}
+.course-modal-item p{font-size:.8rem;color:var(--muted)}
+
+/* ═══════════════════════════════════════════════════
+   COURSE PAGE LAYOUT  — W3Schools-style two-column
+═══════════════════════════════════════════════════ */
+.course-wrapper{
+  display:flex;
+  min-height:calc(100vh - var(--header-h));
+}
+
+/* ── SIDEBAR ──────────────────────────────────────── */
+.course-sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  background:#fff;
+  border-right:1px solid var(--border);
+  position:sticky;top:var(--header-h);
+  height:calc(100vh - var(--header-h));
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+}
+.sidebar-inner{padding:14px 12px;flex:1;overflow-y:auto}
+
+/* Search */
+.sidebar-search{position:relative;margin-bottom:12px}
+.sidebar-search input{
+  width:100%;
+  padding:8px 12px 8px 34px;
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  font-size:.83rem;font-family:inherit;
+  color:var(--text);background:#f8fafc;
+  outline:none;transition:border-color .15s,background .15s;
+}
+.sidebar-search input:focus{border-color:var(--primary);background:#fff}
+.search-icon{
+  position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  font-size:.82rem;color:var(--muted);pointer-events:none;
+  line-height:1;
+}
+
+/* Course label chip */
+.sidebar-course-chip{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 12px;
+  background:var(--primary);color:#fff;
+  border-radius:var(--radius-sm);
+  font-size:.84rem;font-weight:700;
+  margin-bottom:10px;
+  letter-spacing:.01em;
+}
+
+/* Lesson list */
+.lesson-list{list-style:none}
+.lesson-list li{
+  display:flex;align-items:flex-start;gap:8px;
+  padding:9px 12px;
+  border-radius:8px;
+  margin-bottom:2px;
+  font-size:.84rem;
+  cursor:pointer;color:var(--text);
+  transition:background .12s,color .12s;
+  user-select:none;line-height:1.4;
+}
+.lesson-list li:hover{background:var(--primary-light);color:var(--primary)}
+.lesson-list li.active{background:var(--primary);color:#fff;font-weight:600}
+.lesson-num{
+  font-size:.7rem;font-weight:700;
+  min-width:20px;margin-top:2px;
+  opacity:.6;flex-shrink:0;
+}
+.lesson-list li.active .lesson-num{opacity:.85}
+.no-results{font-size:.82rem;color:var(--muted);padding:10px 12px;text-align:center}
+
+/* ── MAIN CONTENT ─────────────────────────────────── */
+.course-main{
+  flex:1;min-width:0;
+  background:#fff;
+}
+.course-main-inner{
+  max-width:860px;
+  padding:30px 40px 48px;
+}
+
+/* Progress bar */
+.lesson-progress-wrap{margin-bottom:22px}
+.lesson-progress-track{
+  height:5px;background:#e5e7eb;
+  border-radius:99px;overflow:hidden;
+}
+.lesson-progress-fill{
+  height:100%;background:var(--primary);
+  border-radius:99px;transition:width .35s ease;
+}
+.lesson-progress-label{font-size:.74rem;color:var(--muted);margin-top:5px}
+
+/* Top / bottom nav rows */
+.lesson-nav-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:28px;gap:8px;
+}
+.lesson-nav-row.bottom{
+  margin-top:44px;margin-bottom:0;
+  padding-top:24px;
+  border-top:1px solid var(--border);
+}
+.btn-nav{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:9px 18px;
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:#fff;color:var(--text);
+  font-size:.88rem;font-weight:500;font-family:inherit;
+  cursor:pointer;transition:border-color .15s,background .15s,color .15s;
+  white-space:nowrap;
+}
+.btn-nav:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light)}
+.btn-nav.btn-next{
+  background:var(--primary);color:#fff;border-color:var(--primary);
+}
+.btn-nav.btn-next:hover{background:#0ea394;border-color:#0ea394}
+.btn-nav:disabled{opacity:.35;cursor:default;pointer-events:none}
+
+/* ── Lesson content typography ───────────────────── */
+.lesson-title{font-size:2rem;font-weight:700;margin-bottom:4px;line-height:1.2}
+.lesson-subtitle{font-size:.98rem;color:var(--muted);margin-bottom:26px;line-height:1.5}
+
+.lesson-body h2{font-size:1.22rem;font-weight:700;margin:28px 0 12px}
+.lesson-body h3{font-size:1rem;font-weight:700;margin:20px 0 8px;color:var(--primary)}
+.lesson-body p{font-size:.93rem;line-height:1.72;color:#374151;margin-bottom:12px}
+.lesson-body ul,.lesson-body ol{padding-left:20px;margin-bottom:14px}
+.lesson-body li{font-size:.91rem;line-height:1.65;color:#374151;margin-bottom:6px}
+.lesson-body strong{color:var(--text)}
+
+/* Callout boxes */
+.info-box{
+  background:var(--primary-light);
+  border-left:4px solid var(--primary);
+  border-radius:0 8px 8px 0;
+  padding:13px 16px;margin:16px 0;
+}
+.info-box p{color:#0f766e;margin:0;font-size:.88rem;line-height:1.6}
+.warn-box{
+  background:#fdf6e0;
+  border-left:4px solid #d97706;
+  border-radius:0 8px 8px 0;
+  padding:13px 16px;margin:16px 0;
+}
+.warn-box p{color:#92400e;margin:0;font-size:.88rem;line-height:1.6}
+
+/* Example boxes */
+.example-box{
+  background:#f8fafc;border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:14px 16px;margin:14px 0;
+}
+.example-label{
+  font-size:.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--muted);margin-bottom:8px;
+}
+.example-box p{
+  color:var(--text);font-style:italic;margin:0;
+  font-size:.9rem;line-height:1.65;white-space:pre-line;
+}
+
+/* Vocabulary table */
+.vocab-table{
+  width:100%;border-collapse:collapse;
+  margin:14px 0;font-size:.88rem;
+}
+.vocab-table th{
+  background:var(--primary);color:#fff;
+  padding:9px 14px;text-align:left;font-size:.8rem;font-weight:600;
+}
+.vocab-table th:first-child{border-radius:var(--radius-sm) 0 0 0}
+.vocab-table th:last-child{border-radius:0 var(--radius-sm) 0 0}
+.vocab-table td{padding:9px 14px;border-bottom:1px solid var(--border);color:#374151}
+.vocab-table tr:last-child td{border-bottom:none}
+.vocab-table tr:hover td{background:var(--primary-light)}
+
+/* Skill badges */
+.badge{
+  display:inline-block;padding:3px 11px;border-radius:99px;
+  font-size:.72rem;font-weight:700;
+  background:var(--primary-light);color:var(--primary);
+  margin:3px 4px 3px 0;
+}
+
+/* ── MOBILE SIDEBAR TOGGLE ─────────────────────────── */
+.sidebar-fab{
+  display:none;
+  position:fixed;bottom:22px;right:22px;z-index:150;
+  width:50px;height:50px;border-radius:50%;
+  background:var(--primary);color:#fff;
+  font-size:1.3rem;border:none;cursor:pointer;
+  box-shadow:0 4px 18px rgba(20,184,166,.45);
+  align-items:center;justify-content:center;
+  transition:transform .15s,box-shadow .15s;
+}
+.sidebar-fab:active{transform:scale(.92)}
+.sidebar-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.45);z-index:148;
+}
+.sidebar-overlay.visible{display:block}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE  ≤ 768 px
+═══════════════════════════════════════════════════ */
+@media(max-width:768px){
+  .course-sidebar{
+    position:fixed;
+    left:-110%;top:var(--header-h);
+    height:calc(100vh - var(--header-h));
+    z-index:149;
+    width:min(var(--sidebar-w),88vw);
+    transition:left .25s ease;
+    box-shadow:4px 0 24px rgba(0,0,0,.13);
+  }
+  .course-sidebar.open{left:0}
+  .sidebar-fab{display:flex}
+  .course-main-inner{padding:20px 16px 36px}
+  .lesson-title{font-size:1.5rem}
+  .lesson-nav-row{gap:6px}
+  .btn-nav{padding:8px 13px;font-size:.82rem}
+  .nav a,.nav-btn{margin-left:10px;font-size:.83rem}
+  .signin-btn{width:36px;height:36px}
+  .signin-btn svg{width:18px;height:18px}
+  .logo{font-size:1.3rem}
+  .course-modal-grid{grid-template-columns:1fr}
+  .modal{padding:20px}
+}
+@media(max-width:400px){
+  .header-left{gap:10px}
+  .logo{font-size:1.15rem}
+  .nav a,.nav-btn{margin-left:8px;font-size:.78rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     HEADER
+══════════════════════════════════════ -->
+<header class="lp-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <!-- Logo → landing page -->
+      <a href="index.html" class="logo-link" aria-label="SkillBridge – beranda">
+        <span class="logo">SkillBridge</span>
+      </a>
+      <nav class="nav" aria-label="Menu utama">
+        <!-- Tentang → landing page #tentang section -->
+        <a href="index.html#tentang">Tentang</a>
+        <!-- Skills → landing page #skills section -->
+        <a href="index.html#skills">Skills</a>
+        <!-- Kursus → opens modal popup -->
+        <button class="nav-btn" id="courseNavBtn">Kursus</button>
+      </nav>
+    </div>
+    <!-- Avatar → dashboard -->
+    <button class="signin-btn" id="signinBtn" aria-label="Buka dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 20c0-4 3.5-7 8-7s8 3 8 7"></path>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════
+     COURSE MODAL  (copied from index.html)
+══════════════════════════════════════ -->
+<div class="modal-overlay" id="courseModalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="courseModalTitle">
+    <button class="modal-close" id="courseModalClose" aria-label="Tutup">✕</button>
+    <h2 id="courseModalTitle">Kursus SkillBridge</h2>
+    <div class="course-modal-grid">
+      <div class="course-modal-item">
+        <span class="course-modal-icon">📊</span>
+        <h4>Excel Fundamentals</h4>
+        <p>Belajar analisis data dasar menggunakan Excel.</p>
+      </div>
+      <div class="course-modal-item" id="modalCourseEnglish">
+        <span class="course-modal-icon">🗣️</span>
+        <h4>Bahasa Inggris Kerja</h4>
+        <p>Meningkatkan kemampuan bahasa Inggris untuk kebutuhan dunia kerja.</p>
+      </div>
+      <div class="course-modal-item">
+        <span class="course-modal-icon">🐍</span>
+        <h4>Python Fundamentals</h4>
+        <p>Otomasi dan pemrosesan data menggunakan Python.</p>
+      </div>
+      <div class="course-modal-item">
+        <span class="course-modal-icon">🤖</span>
+        <h4>AI Prompting for Work</h4>
+        <p>Meningkatkan produktivitas kerja dengan bantuan AI.</p>
+      </div>
+      <div class="course-modal-item">
+        <span class="course-modal-icon">🎨</span>
+        <h4>Canva for Social Media</h4>
+        <p>Membuat konten visual menarik untuk media sosial.</p>
+      </div>
+      <div class="course-modal-item">
+        <span class="course-modal-icon">🤝</span>
+        <h4>Pelayanan Pelanggan</h4>
+        <p>Keterampilan melayani pelanggan dengan baik di berbagai situasi kerja.</p>
+      </div>
+      <div class="course-modal-item">
+        <span class="course-modal-icon">📉</span>
+        <h4>Power BI Essentials</h4>
+        <p>Membuat visualisasi data interaktif dengan Power BI.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     COURSE LAYOUT
+══════════════════════════════════════ -->
+<div class="course-wrapper">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="course-sidebar" id="courseSidebar" aria-label="Daftar materi kursus">
+    <div class="sidebar-inner">
+
+      <!-- Search bar -->
+      <div class="sidebar-search">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="lessonSearch"
+               placeholder="Cari materi…"
+               aria-label="Cari materi dalam kursus ini">
+      </div>
+
+      <!-- Course chip -->
+      <div class="sidebar-course-chip">
+        <span>🗣️</span>
+        <span>Bahasa Inggris Kerja</span>
+      </div>
+
+      <!-- Lesson list (populated by JS) -->
+      <ul class="lesson-list" id="lessonList" role="list"></ul>
+      <p class="no-results" id="noResults" style="display:none">
+        Materi tidak ditemukan.
+      </p>
+
+    </div>
+  </aside>
+
+  <!-- Mobile sidebar overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="course-main" id="courseMain">
+    <div class="course-main-inner">
+
+      <!-- Progress -->
+      <div class="lesson-progress-wrap">
+        <div class="lesson-progress-track">
+          <div class="lesson-progress-fill" id="progressFill" style="width:10%"></div>
+        </div>
+        <p class="lesson-progress-label" id="progressLabel">Materi 1 dari 10</p>
+      </div>
+
+      <!-- Top nav -->
+      <div class="lesson-nav-row" id="topNav">
+        <button class="btn-nav" id="prevBtnTop" onclick="navigate(-1)">❮ Sebelumnya</button>
+        <button class="btn-nav btn-next" id="nextBtnTop" onclick="navigate(1)">Selanjutnya ❯</button>
+      </div>
+
+      <!-- Dynamic lesson content -->
+      <div id="lessonContent"></div>
+
+      <!-- Bottom nav -->
+      <div class="lesson-nav-row bottom">
+        <button class="btn-nav" id="prevBtnBottom" onclick="navigate(-1)">❮ Sebelumnya</button>
+        <button class="btn-nav btn-next" id="nextBtnBottom" onclick="navigate(1)">Selanjutnya ❯</button>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- Mobile FAB to open sidebar -->
+<button class="sidebar-fab" id="sidebarFab" aria-label="Buka daftar materi">☰</button>
+
+<!-- ══════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
+<script>
+/* ══════════════════════════════════════════════════════
+   LESSON DATA  — 10 lessons with full content
+══════════════════════════════════════════════════════ */
+const LESSONS = [
+  /* 0 */ {
+    title: "Pengenalan Kursus",
+    html: `
+      <h1 class="lesson-title">Bahasa Inggris Kerja</h1>
+      <p class="lesson-subtitle">Kuasai bahasa Inggris profesional untuk karier yang lebih maju</p>
+      <div class="lesson-body">
+        <div class="info-box"><p>⏱ Durasi rata-rata per materi: <strong>10–15 menit</strong>. Bisa dipelajari kapan saja, di antara kesibukanmu.</p></div>
+
+        <h2>Selamat Datang di Kursus Ini</h2>
+        <p>Kursus <strong>Bahasa Inggris Kerja</strong> dirancang khusus untuk kamu yang ingin meningkatkan kemampuan bahasa Inggris dalam konteks pekerjaan nyata — bukan sekadar hafalan grammar atau kosakata terpisah.</p>
+        <p>Setiap materi dibuat singkat, padat, dan langsung bisa dipraktikkan: di email, rapat, telepon, wawancara kerja, atau saat membangun relasi profesional.</p>
+
+        <h2>Yang Akan Kamu Pelajari</h2>
+        <ul>
+          <li>Menulis email profesional yang jelas, sopan, dan efektif</li>
+          <li>Frasa kunci untuk rapat dan presentasi</li>
+          <li>Menjawab pertanyaan wawancara kerja dengan percaya diri</li>
+          <li>Percakapan telepon bisnis yang natural</li>
+          <li>Kosakata dan ekspresi umum di tempat kerja modern</li>
+          <li>Menulis memo, laporan, dan proposal bisnis</li>
+          <li>Membangun relasi profesional melalui networking</li>
+          <li>Teknik negosiasi menggunakan bahasa Inggris</li>
+        </ul>
+
+        <h2>Untuk Siapa Kursus Ini?</h2>
+        <div class="example-box">
+          <div class="example-label">Target Peserta</div>
+          <p>Profesional muda, fresh graduate, atau siapapun yang ingin meningkatkan kemampuan bahasa Inggris untuk lingkungan kerja yang nyata — tanpa harus kembali ke bangku kelas.</p>
+        </div>
+        <p>Tidak perlu kemampuan bahasa Inggris yang sempurna untuk memulai. Yang penting adalah kemauan untuk terus berlatih dan berani mencoba.</p>
+
+        <h2>Tips Belajar yang Efektif</h2>
+        <ul>
+          <li>Baca setiap materi dengan pelan dan perhatikan contohnya</li>
+          <li>Coba praktikkan frasa baru dalam percakapan atau tulisan nyata</li>
+          <li>Ulangi materi yang dirasa perlu diperkuat</li>
+          <li>Gunakan contoh yang diberikan sebagai template siap pakai</li>
+        </ul>
+
+        <div class="warn-box"><p>💡 <strong>Tips:</strong> Konsistensi lebih penting dari intensitas. Belajar 15 menit setiap hari jauh lebih efektif daripada belajar 2 jam sekali seminggu.</p></div>
+      </div>`
+  },
+  /* 1 */ {
+    title: "Email Profesional",
+    html: `
+      <h1 class="lesson-title">Email Profesional</h1>
+      <p class="lesson-subtitle">Tulis email bisnis yang efektif, jelas, dan berkesan</p>
+      <div class="lesson-body">
+        <div class="info-box"><p>📧 Email yang baik mencerminkan profesionalisme. Struktur yang rapi dan bahasa yang tepat membuat pesanmu lebih mudah ditindaklanjuti.</p></div>
+
+        <h2>Struktur Email Profesional</h2>
+        <p>Setiap email profesional mengikuti pola: <strong>Subject → Greeting → Opening → Body → Closing → Signature.</strong></p>
+
+        <h3>1. Subject Line</h3>
+        <p>Subject yang baik singkat, spesifik, dan memberi gambaran isi email.</p>
+        <div class="example-box">
+          <div class="example-label">Contoh Subject yang Baik</div>
+          <p>"Meeting Request – Q3 Budget Review (Thu, 3 PM)"
+"Follow-up: Project Proposal Submitted Last Week"
+"Invoice #2045 – Payment Due July 15"</p>
+        </div>
+
+        <h3>2. Greeting</h3>
+        <table class="vocab-table">
+          <tr><th>Situasi</th><th>Frasa</th></tr>
+          <tr><td>Formal – kenal nama</td><td>Dear Mr. / Ms. [Nama],</td></tr>
+          <tr><td>Semi-formal</td><td>Hello [Nama], / Hi [Nama],</td></tr>
+          <tr><td>Tidak kenal nama</td><td>Dear Sir or Madam, / To Whom It May Concern,</td></tr>
+        </table>
+
+        <h3>3. Opening Line</h3>
+        <ul>
+          <li>"I am writing to inquire about…"</li>
+          <li>"I would like to follow up on…"</li>
+          <li>"I am reaching out regarding…"</li>
+          <li>"Thank you for your email regarding…"</li>
+        </ul>
+
+        <h3>4. Closing</h3>
+        <table class="vocab-table">
+          <tr><th>Tingkat Formalitas</th><th>Frasa Penutup</th></tr>
+          <tr><td>Sangat Formal</td><td>Yours sincerely, / Yours faithfully,</td></tr>
+          <tr><td>Formal</td><td>Best regards, / Kind regards,</td></tr>
+          <tr><td>Semi-formal</td><td>Best, / Thanks,</td></tr>
+        </table>
+
+        <h2>Contoh Email Lengkap</h2>
+        <div class="example-box">
+          <div class="example-label">Email Permintaan Rapat</div>
+          <p><strong>Subject:</strong> Meeting Request – Q3 Sales Review
+
+Dear Ms. Sarah,
+
+I hope this email finds you well. I am writing to request a brief meeting to discuss the Q3 sales performance and our strategy for the upcoming quarter.
+
+Would you be available for a 30-minute call this Thursday or Friday afternoon? Please let me know your preferred time and I will send a calendar invite accordingly.
+
+Thank you for your time, and I look forward to hearing from you.
+
+Best regards,
+Budi Santoso
+Sales Manager | PT Maju Bersama</p>
+        </div>
+
+        <div class="warn-box"><p>⚠️ Hindari singkatan informal seperti "u", "ur", "btw" dalam email profesional. Selalu periksa ejaan sebelum mengirim.</p></div>
+      </div>`
+  },
+  /* 2 */ {
+    title: "Rapat & Presentasi",
+    html: `
+      <h1 class="lesson-title">Rapat & Presentasi</h1>
+      <p class="lesson-subtitle">Frasa kunci untuk tampil percaya diri di meeting dan presentasi</p>
+      <div class="lesson-body">
+        <div class="info-box"><p>🎤 Rapat dan presentasi adalah kesempatan terbaik menunjukkan kompetensi. Frasa-frasa yang tepat membuat kamu terdengar lebih siap dan profesional.</p></div>
+
+        <h2>Membuka Rapat</h2>
+        <ul>
+          <li>"Let's get started." / "Shall we begin?"</li>
+          <li>"The purpose of today's meeting is to…"</li>
+          <li>"We have about [X] minutes, so let's make the most of it."</li>
+          <li>"Could everyone please introduce themselves briefly?"</li>
+        </ul>
+
+        <h2>Menyampaikan Pendapat</h2>
+        <ul>
+          <li>"In my opinion…" / "From my perspective…"</li>
+          <li>"I think we should consider…"</li>
+          <li>"Based on the data, I believe…"</li>
+          <li>"I'd like to add that…"</li>
+        </ul>
+
+        <h2>Memotong Pembicaraan dengan Sopan</h2>
+        <ul>
+          <li>"Sorry to interrupt, but…"</li>
+          <li>"If I may jump in here…"</li>
+          <li>"Could I add something to that point?"</li>
+        </ul>
+
+        <h2>Frasa untuk Presentasi</h2>
+        <h3>Pembuka</h3>
+        <ul>
+          <li>"Good morning/afternoon, everyone. Today I'll be presenting…"</li>
+          <li>"My presentation will cover three main points…"</li>
+          <li>"By the end of this session, you will understand…"</li>
+        </ul>
+        <h3>Transisi Antar Poin</h3>
+        <ul>
+          <li>"Moving on to our next point…"</li>
+          <li>"This brings me to…"</li>
+          <li>"Now, let's look at…"</li>
+          <li>"As you can see on this slide…"</li>
+        </ul>
+        <h3>Penutup</h3>
+        <ul>
+          <li>"To summarize what we've covered today…"</li>
+          <li>"In conclusion…"</li>
+          <li>"I'd be happy to take any questions now."</li>
+        </ul>
+
+        <div class="warn-box"><p>💡 Latih presentasimu di depan cermin atau rekam diri sendiri. Perhatikan kecepatan bicara — terlalu cepat adalah kesalahan paling umum saat gugup.</p></div>
+      </div>`
+  },
+  /* 3 */ {
+    title: "Wawancara Kerja",
+    html: `
+      <h1 class="lesson-title">Wawancara Kerja</h1>
+      <p class="lesson-subtitle">Jawab pertanyaan interview dengan percaya diri dalam bahasa Inggris</p>
+      <div class="lesson-body">
+        <div class="info-box"><p>💼 Wawancara dalam bahasa Inggris lebih menantang, tapi dengan persiapan yang tepat kamu bisa tampil maksimal. Kunci utamanya: latihan dan contoh nyata.</p></div>
+
+        <h2>Pertanyaan Umum & Cara Menjawabnya</h2>
+
+        <h3>"Tell me about yourself."</h3>
+        <p>Gunakan pola: <strong>Siapa kamu → Pengalaman terkait → Mengapa tertarik dengan posisi ini.</strong></p>
+        <div class="example-box">
+          <div class="example-label">Contoh Jawaban</div>
+          <p>"I'm a marketing professional with three years of experience in digital advertising. In my previous role at PT XYZ, I led a campaign that increased online sales by 40%. I'm passionate about data-driven marketing and I'm looking for an opportunity to grow in a forward-thinking company like yours."</p>
+        </div>
+
+        <h3>"What are your strengths?"</h3>
+        <ul>
+          <li>"One of my key strengths is problem-solving. For example, when…"</li>
+          <li>"I'm highly organized and able to manage multiple projects simultaneously."</li>
+          <li>"I'm a strong communicator and work well in team environments."</li>
+        </ul>
+
+        <h3>"Where do you see yourself in 5 years?"</h3>
+        <div class="example-box">
+          <div class="example-label">Contoh Jawaban</div>
+          <p>"In five years, I hope to have grown into a leadership role where I can contribute strategically to the company's direction. I'm eager to develop my skills and take on more responsibility over time."</p>
+        </div>
+
+        <h2>Frasa Berguna Saat Wawancara</h2>
+        <table class="vocab-table">
+          <tr><th>Situasi</th><th>Frasa</th></tr>
+          <tr><td>Tidak paham pertanyaan</td><td>"Could you please clarify what you mean by…?"</td></tr>
+          <tr><td>Butuh waktu berpikir</td><td>"That's a great question. Let me think for a moment."</td></tr>
+          <tr><td>Bertanya balik</td><td>"Could you tell me more about the team I'd be working with?"</td></tr>
+          <tr><td>Menutup wawancara</td><td>"Thank you for this opportunity. I'm very excited about joining your team."</td></tr>
+        </table>
+
+        <div class="warn-box"><p>💡 Akhiri selalu dengan antusias. Pewawancara mengingat kesan pertama dan kesan terakhir, bukan yang di tengah.</p></div>
+      </div>`
+  },
+  /* 4 */ {
+    title: "Telepon Bisnis",
+    html: `
+      <h1 class="lesson-title">Telepon Bisnis</h1>
+      <p class="lesson-subtitle">Percakapan telepon profesional yang lancar dan efektif</p>
+      <div class="lesson-body">
+        <div class="info-box"><p>📞 Berbicara lewat telepon dalam bahasa Inggris membutuhkan frasa-frasa khusus. Tanpa ekspresi wajah dan gestur, kejelasan bahasa menjadi segalanya.</p></div>
+
+        <h2>Membuka Percakapan</h2>
+        <h3>Saat Menelepon (Caller)</h3>
+        <ul>
+          <li>"Hello, this is [Nama] calling from [Perusahaan]."</li>
+          <li>"May I speak with [Nama], please?"</li>
+          <li>"I'm calling regarding [topik]."</li>
+        </ul>
+        <h3>Saat Menerima (Receiver)</h3>
+        <ul>
+          <li>"Good morning, [Nama Perusahaan], [Namamu] speaking."</li>
+          <li>"How may I help you?"</li>
+          <li>"Could I ask who's calling, please?"</li>
+        </ul>
+
+        <h2>Frasa Penting di Tengah Percakapan</h2>
+        <table class="vocab-table">
+          <tr><th>Situasi</th><th>Frasa</th></tr>
+          <tr><td>Minta tunggu</td><td>"Could you hold on for a moment, please?"</td></tr>
+          <tr><td>Transfer telepon</td><td>"Let me transfer you to the right department."</td></tr>
+          <tr><td>Tinggalkan pesan</td><td>"Could I leave a message for her?"</td></tr>
+          <tr><td>Koneksi buruk</td><td>"I'm sorry, the line is breaking up. Could you repeat that?"</td></tr>
+          <tr><td>Mengakhiri</td><td>"Thank you for calling. Have a great day!"</td></tr>
+        </table>
+
+        <h2>Contoh Dialog Lengkap</h2>
+        <div class="example-box">
+          <div class="example-label">Contoh Percakapan Telepon</div>
+          <p><strong>A:</strong> "Good morning, PT Maju Bersama, Rina speaking. How may I help you?"
+
+<strong>B:</strong> "Good morning. This is David from ABC Consulting. May I speak with Mr. Hendra, please?"
+
+<strong>A:</strong> "I'm afraid Mr. Hendra is in a meeting right now. Would you like to leave a message or call back later?"
+
+<strong>B:</strong> "I'll leave a message. Could you let him know I called regarding the partnership proposal?"
+
+<strong>A:</strong> "Of course. I'll make sure he gets your message. Is there a number he can reach you at?"
+
+<strong>B:</strong> "Yes, it's 0812-3456-7890. Thank you very much."
+
+<strong>A:</strong> "You're welcome. Have a great day, Mr. David."</p>
+        </div>
+      </div>`
+  },
+  /* 5 */ {
+    title: "Kosakata Tempat Kerja",
+    html: `
+      <h1 class="lesson-title">Kosakata Tempat Kerja</h1>
+      <p class="lesson-subtitle">Perbendaharaan kata yang wajib dikuasai di lingkungan profesional modern</p>
+      <div class="lesson-body">
+        <div class="info-box"><p>📚 Menguasai kosakata tempat kerja membuatmu terdengar lebih natural dan setara dengan kolega internasional dalam percakapan sehari-hari.</p></div>
+
+        <h2>Istilah Manajemen & Proyek</h2>
+        <table class="vocab-table">
+          <tr><th>Istilah</th><th>Artinya</th></tr>
+          <tr><td>Deadline</td><td>Batas waktu penyelesaian tugas</td></tr>
+          <tr><td>KPI</td><td>Indikator kinerja utama (Key Performance Indicator)</td></tr>
+          <tr><td>Deliverable</td><td>Hasil kerja yang harus diserahkan</td></tr>
+          <tr><td>Stakeholder</td><td>Pihak yang berkepentingan terhadap proyek</td></tr>
+          <tr><td>Action item</td><td>Tugas yang perlu ditindaklanjuti setelah rapat</td></tr>
+          <tr><td>Bandwidth</td><td>Kapasitas waktu atau kemampuan seseorang</td></tr>
+          <tr><td>On track</td><td>Berjalan sesuai rencana</td></tr>
+          <tr><td>Bottleneck</td><td>Hambatan yang memperlambat proses</td></tr>
+        </table>
+
+        <h2>Ekspresi Sehari-hari di Tempat Kerja</h2>
+        <ul>
+          <li><strong>"Let's circle back on this."</strong> – Mari kita bahas ini nanti</li>
+          <li><strong>"I'll loop you in."</strong> – Saya akan melibatkan kamu</li>
+          <li><strong>"Let's touch base."</strong> – Mari kita koordinasi sebentar</li>
+          <li><strong>"Can we take this offline?"</strong> – Bisakah kita diskusi di luar rapat?</li>
+          <li><strong>"I'll get back to you."</strong> – Saya akan menghubungimu nanti</li>
+          <li><strong>"Moving forward…"</strong> – Ke depannya… / Mulai sekarang…</li>
+        </ul>
+
+        <h2>Kata Sifat Profesional untuk Diri Sendiri</h2>
+        <p>Gunakan kata-kata ini saat menulis profil, CV, atau wawancara kerja:</p>
+        <span class="badge">proactive</span>
+        <span class="badge">detail-oriented</span>
+        <span class="badge">results-driven</span>
+        <span class="badge">collaborative</span>
+        <span class="badge">adaptable</span>
+        <span class="badge">self-motivated</span>
+        <span class="badge">analytical</span>
+        <span class="badge">deadline-conscious</span>
+        <span class="badge">resourceful</span>
+        <span class="badge">team-oriented</span>
+
+        <div class="warn-box"><p>💡 Gunakan kata-kata ini dengan konteks. Jangan hanya menyebutnya — berikan contoh nyata yang mendukung setiap sifat yang kamu klaim.</p></div>
+      </div>`
+  },
+  /* 6 */ {
+    title: "Penulisan Bisnis",
+    html: `
+      <h1 class="lesson-title">Penulisan Bisnis</h1>
+      <p class="lesson-subtitle">Menulis memo, ringkasan, dan dokumen bisnis yang profesional</p>
+      <div class="lesson-body">
+        <div class="info-box"><p>✍️ Penulisan bisnis yang baik adalah singkat, jelas, dan langsung ke inti. Hindari kalimat berlebihan yang membuang waktu pembaca.</p></div>
+
+        <h2>4C dalam Penulisan Bisnis</h2>
+        <ul>
+          <li><strong>Clear</strong> – Gunakan bahasa yang mudah dipahami tanpa ambiguitas</li>
+          <li><strong>Concise</strong> – Sampaikan dengan singkat, tanpa kata-kata mubazir</li>
+          <li><strong>Correct</strong> – Pastikan fakta, angka, dan tata bahasa benar</li>
+          <li><strong>Courteous</strong> – Jaga nada yang sopan dan profesional</li>
+        </ul>
+
+        <h2>Format Memo Bisnis</h2>
+        <div class="example-box">
+          <div class="example-label">Contoh Memo</div>
+          <p><strong>TO:</strong> All Staff
+<strong>FROM:</strong> HR Department
+<strong>DATE:</strong> June 29, 2026
+<strong>RE:</strong> New Hybrid Work Policy
+
+Please be informed that starting July 1, 2026, the company will implement a hybrid work schedule. Employees may work remotely up to two days per week.
+
+Kindly coordinate with your manager to arrange your schedule. For details, refer to the attached policy document.
+
+Thank you for your cooperation.</p>
+        </div>
+
+        <h2>Kata Transisi yang Berguna</h2>
+        <table class="vocab-table">
+          <tr><th>Fungsi</th><th>Kata / Frasa Transisi</th></tr>
+          <tr><td>Menambah informasi</td><td>Furthermore, In addition, Moreover</td></tr>
+          <tr><td>Menunjukkan kontras</td><td>However, On the other hand, Nevertheless</td></tr>
+          <tr><td>Menyimpulkan</td><td>In conclusion, To summarize, Therefore</td></tr>
+          <tr><td>Memberi contoh</td><td>For example, For instance, Such as</td></tr>
+          <tr><td>Menunjukkan urutan</td><td>First, Subsequently, Finally</td></tr>
+        </table>
+
+        <div class="warn-box"><p>⚠️ Hindari jargon berlebihan. Tulis seperti kamu berbicara kepada rekan kerja yang cerdas tapi tidak punya waktu banyak untuk membaca.</p></div>
+      </div>`
+  },
+  /* 7 */ {
+    title: "Networking Profesional",
+    html: `
+      <h1 class="lesson-title">Networking Profesional</h1>
+      <p class="lesson-subtitle">Membangun relasi bermakna dalam bahasa Inggris</p>
+      <div class="lesson-body">
+        <div class="info-box"><p>🤝 Networking yang efektif bukan soal mengumpulkan kontak sebanyak-banyaknya, tapi tentang membangun hubungan yang saling menguntungkan dan autentik.</p></div>
+
+        <h2>Memperkenalkan Diri (Elevator Pitch)</h2>
+        <div class="example-box">
+          <div class="example-label">Template Perkenalan Singkat</div>
+          <p>"Hi, I'm [Nama]. I work as a [jabatan] at [perusahaan]. I specialize in [keahlian], and I'm particularly interested in [topik/industri]. It's great to meet you!"</p>
+        </div>
+
+        <h2>Memulai Percakapan</h2>
+        <ul>
+          <li>"What brings you to this event?"</li>
+          <li>"How did you get into [industri/bidang]?"</li>
+          <li>"I noticed you work at [perusahaan]. What's that been like?"</li>
+          <li>"Have you attended events like this before?"</li>
+          <li>"What projects are you currently working on?"</li>
+        </ul>
+
+        <h2>Follow-up Setelah Pertemuan</h2>
+        <div class="example-box">
+          <div class="example-label">Contoh Pesan LinkedIn / Email Follow-up</div>
+          <p>"Hi [Nama], it was great meeting you at [acara] yesterday. I really enjoyed our conversation about [topik]. I'd love to stay in touch and perhaps explore how we could collaborate in the future. Looking forward to connecting!"</p>
+        </div>
+
+        <h2>Mengakhiri Percakapan dengan Elegan</h2>
+        <ul>
+          <li>"It was really nice talking with you. I'll let you mingle."</li>
+          <li>"I don't want to take up too much of your time — great meeting you!"</li>
+          <li>"Let's exchange contacts and keep in touch."</li>
+          <li>"I'd love to continue this conversation — can I connect with you on LinkedIn?"</li>
+        </ul>
+
+        <div class="warn-box"><p>💡 Selalu follow up dalam 24–48 jam setelah pertemuan. Menunggu terlalu lama membuat koneksi cepat mendingin.</p></div>
+      </div>`
+  },
+  /* 8 */ {
+    title: "Laporan & Proposal",
+    html: `
+      <h1 class="lesson-title">Laporan & Proposal</h1>
+      <p class="lesson-subtitle">Struktur dan bahasa untuk dokumen formal bisnis</p>
+      <div class="lesson-body">
+        <div class="info-box"><p>📋 Laporan dan proposal yang baik memiliki struktur jelas dan bahasa formal yang tetap mudah dipahami. Tujuannya: membantu pembaca memutuskan sesuatu.</p></div>
+
+        <h2>Struktur Laporan Bisnis</h2>
+        <ol>
+          <li><strong>Executive Summary</strong> – Ringkasan singkat seluruh laporan</li>
+          <li><strong>Introduction</strong> – Latar belakang dan tujuan laporan</li>
+          <li><strong>Methodology</strong> – Bagaimana data dikumpulkan/dianalisis</li>
+          <li><strong>Findings</strong> – Temuan utama dari analisis</li>
+          <li><strong>Conclusion</strong> – Interpretasi dan kesimpulan</li>
+          <li><strong>Recommendations</strong> – Saran tindak lanjut yang spesifik</li>
+        </ol>
+
+        <h2>Bahasa Formal vs Informal</h2>
+        <table class="vocab-table">
+          <tr><th>Informal (hindari)</th><th>Formal (gunakan ini)</th></tr>
+          <tr><td>We found out that…</td><td>The findings indicate that…</td></tr>
+          <tr><td>We think…</td><td>It is recommended that…</td></tr>
+          <tr><td>The problem is…</td><td>The primary challenge identified is…</td></tr>
+          <tr><td>We did a survey</td><td>A survey was conducted among…</td></tr>
+          <tr><td>A lot of people</td><td>A significant proportion of respondents…</td></tr>
+        </table>
+
+        <h2>Frasa Pembuka untuk Executive Summary</h2>
+        <ul>
+          <li>"This report examines the impact of…"</li>
+          <li>"The purpose of this report is to analyze…"</li>
+          <li>"Based on our analysis, we recommend…"</li>
+          <li>"The key findings of this report are as follows:"</li>
+        </ul>
+
+        <div class="warn-box"><p>💡 Executive summary ditulis terakhir tapi diletakkan pertama. Pastikan pembaca bisa memahami inti laporan hanya dari membaca bagian ini.</p></div>
+      </div>`
+  },
+  /* 9 */ {
+    title: "Negosiasi Bisnis",
+    html: `
+      <h1 class="lesson-title">Negosiasi Bisnis</h1>
+      <p class="lesson-subtitle">Teknik dan frasa untuk bernegosiasi dengan percaya diri</p>
+      <div class="lesson-body">
+        <div class="info-box"><p>🤝 Negosiasi yang baik bukan tentang menang atau kalah, tapi tentang menemukan solusi terbaik untuk semua pihak. Bahasa yang tepat membuat prosesnya lebih lancar.</p></div>
+
+        <h2>Membuka Negosiasi</h2>
+        <ul>
+          <li>"Thank you for this opportunity to discuss our proposal."</li>
+          <li>"We'd like to explore a mutually beneficial arrangement."</li>
+          <li>"Our initial offer is [X], and we're open to discussion."</li>
+          <li>"Let's see how we can make this work for both sides."</li>
+        </ul>
+
+        <h2>Mengajukan Counter-offer</h2>
+        <ul>
+          <li>"We appreciate your offer, but we were hoping for something closer to…"</li>
+          <li>"Would you be able to consider [syarat alternatif]?"</li>
+          <li>"If you can [syarat A], we'd be happy to agree on [konsesi B]."</li>
+          <li>"That's a bit higher than our budget. Is there any flexibility?"</li>
+        </ul>
+
+        <h2>Meminta Waktu & Mempertimbangkan</h2>
+        <ul>
+          <li>"Could we take a short break to discuss this internally?"</li>
+          <li>"I'll need to consult with my team before committing."</li>
+          <li>"Let me get back to you by end of day."</li>
+        </ul>
+
+        <h2>Menutup Negosiasi</h2>
+        <table class="vocab-table">
+          <tr><th>Situasi</th><th>Frasa</th></tr>
+          <tr><td>Setuju</td><td>"We have a deal. Let's put this in writing."</td></tr>
+          <tr><td>Perlu persetujuan lanjut</td><td>"Subject to final approval, we can move forward."</td></tr>
+          <tr><td>Tidak setuju saat ini</td><td>"I'm afraid we're unable to meet those terms at this time."</td></tr>
+        </table>
+
+        <div class="example-box">
+          <div class="example-label">Kalimat Penutup yang Profesional</div>
+          <p>"I'm glad we could reach an agreement. I look forward to a successful partnership between our companies."</p>
+        </div>
+
+        <div class="warn-box"><p>💡 <strong>Ingat:</strong> Dalam negosiasi, diam bisa menjadi senjata yang kuat. Setelah mengajukan penawaran, biarkan pihak lain merespons terlebih dahulu — jangan terburu-buru mengisi keheningan.</p></div>
+      </div>`
+  }
+];
+
+/* ══════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════ */
+let currentIndex = 0;
+
+/* ══════════════════════════════════════════════════════
+   RENDER SIDEBAR LIST
+══════════════════════════════════════════════════════ */
+function renderSidebar(filter) {
+  filter = (filter || '').toLowerCase().trim();
+  const list     = document.getElementById('lessonList');
+  const noResult = document.getElementById('noResults');
+  list.innerHTML = '';
+  let shown = 0;
+
+  LESSONS.forEach((lesson, i) => {
+    if (filter && !lesson.title.toLowerCase().includes(filter)) return;
+    shown++;
+    const li = document.createElement('li');
+    li.setAttribute('role', 'listitem');
+    li.innerHTML =
+      `<span class="lesson-num">${String(i + 1).padStart(2, '0')}</span>${lesson.title}`;
+    if (i === currentIndex) li.classList.add('active');
+    li.addEventListener('click', () => { loadLesson(i); closeSidebarMobile(); });
+    list.appendChild(li);
+  });
+
+  noResult.style.display = shown === 0 ? 'block' : 'none';
+}
+
+/* ══════════════════════════════════════════════════════
+   LOAD LESSON
+══════════════════════════════════════════════════════ */
+function loadLesson(index) {
+  currentIndex = index;
+  document.getElementById('lessonContent').innerHTML = LESSONS[index].html;
+
+  // Progress bar
+  const pct = Math.round(((index + 1) / LESSONS.length) * 100);
+  document.getElementById('progressFill').style.width  = pct + '%';
+  document.getElementById('progressLabel').textContent =
+    `Materi ${index + 1} dari ${LESSONS.length}`;
+
+  // Nav buttons
+  const isFirst = index === 0;
+  const isLast  = index === LESSONS.length - 1;
+  document.getElementById('prevBtnTop').disabled    = isFirst;
+  document.getElementById('prevBtnBottom').disabled = isFirst;
+  document.getElementById('nextBtnTop').disabled    = isLast;
+  document.getElementById('nextBtnBottom').disabled = isLast;
+
+  // Re-render sidebar to update active state
+  renderSidebar(document.getElementById('lessonSearch').value);
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function navigate(dir) {
+  const next = currentIndex + dir;
+  if (next >= 0 && next < LESSONS.length) loadLesson(next);
+}
+
+/* ══════════════════════════════════════════════════════
+   SEARCH
+══════════════════════════════════════════════════════ */
+document.getElementById('lessonSearch').addEventListener('input', function () {
+  renderSidebar(this.value);
+});
+
+/* ══════════════════════════════════════════════════════
+   MOBILE SIDEBAR
+══════════════════════════════════════════════════════ */
+function openSidebarMobile() {
+  document.getElementById('courseSidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+function closeSidebarMobile() {
+  document.getElementById('courseSidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+document.getElementById('sidebarFab').addEventListener('click', openSidebarMobile);
+document.getElementById('sidebarOverlay').addEventListener('click', closeSidebarMobile);
+
+/* ══════════════════════════════════════════════════════
+   COURSE MODAL
+══════════════════════════════════════════════════════ */
+const courseModalOverlay = document.getElementById('courseModalOverlay');
+function openCourseModal()  { courseModalOverlay.classList.add('open');    document.body.style.overflow = 'hidden'; }
+function closeCourseModal() { courseModalOverlay.classList.remove('open'); document.body.style.overflow = '';       }
+
+document.getElementById('courseNavBtn').addEventListener('click', openCourseModal);
+document.getElementById('courseModalClose').addEventListener('click', closeCourseModal);
+courseModalOverlay.addEventListener('click', e => { if (e.target === courseModalOverlay) closeCourseModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCourseModal(); });
+
+// Clicking this course in the modal keeps us here and closes the modal
+document.getElementById('modalCourseEnglish').addEventListener('click', () => {
+  closeCourseModal();
+  loadLesson(0);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* ══════════════════════════════════════════════════════
+   HEADER BUTTONS
+══════════════════════════════════════════════════════ */
+document.getElementById('signinBtn').addEventListener('click', () => {
+  window.location.href = 'dash%20board.html';
+});
+
+/* ══════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════ */
+renderSidebar();
+loadLesson(0);
+</script>
+</body>
+</html>
